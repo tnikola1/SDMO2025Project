@@ -2,7 +2,7 @@ import pandas as pd
 
 
 # Data from https://github.com/IntelligentDDS/Nezha/blob/main/construct_data/2023-01-30/trace/11_39_trace.csv
-df = pd.read_csv("project3data/train-ticket-traces.csv")
+df = pd.read_csv("project2&3traces/train-ticket-traces.csv")
 
 
 # Rename columns for clarity
@@ -60,4 +60,4 @@ result = inter_service_calls[[
 # Optional: sort by time
 result = result.sort_values(by='time')
 
-result.to_csv("project3data/traces.csv", index=False, header=True)
+result.to_csv("project2&3traces/edgeflow.csv", index=False, header=True)
