@@ -15,49 +15,61 @@ df.rename(columns={
     'EndTimeUnixNano': 'end_time'
 }, inplace=True)
 
-# Extract service name from pod name (everything before the first hyphen)
-# df['service'] = df['pod_name'].str.replace(r'-[^-]+-[^-]+$', '', regex=True)
-
 # Create lookup of spans by SpanID
 span_lookup = df.set_index('span_id')
 
 # Join spans with their parent spans
-df['parent_service'] = df['parent_id'].map(span_lookup['service'])
-df['parent_operation'] = df['parent_id'].map(span_lookup['operation'])
-df['parent_start_time'] = df['parent_id'].map(span_lookup['start_time'])
+df['caller_service'] = df['parent_id'].map(span_lookup['service'])
 
 # Filter: only inter-service calls (caller != callee)
-inter_service_calls = df[df['service'] != df['parent_service']].copy()
+inter_service_calls = df[df['service'] != df['caller_service']].copy()
 # Filter: remove rows with missing caller_service (e.g., root spans)
-inter_service_calls = inter_service_calls[inter_service_calls["parent_service"].notna()]
+inter_service_calls = inter_service_calls[inter_service_calls["caller_service"].notna()]
 
-# Convert start time to readable datetime
-inter_service_calls['time'] = pd.to_datetime(inter_service_calls['start_time'], unit='ns')
-# Round start_time to nearest second (unix precision in seconds)
-rounding_precision = 1_000_000_000    # 1s in nanoseconds
-inter_service_calls['timestamp'] = (inter_service_calls['start_time'] // rounding_precision).astype(int)
+
+
+inter_service_calls.rename(columns={
+    'service': 'callee_service'
+}, inplace=True)
+
+# Optional: ort by time
+inter_service_calls = inter_service_calls.sort_values(by='start_time')
+
+# # Select relevant columns
+# result = inter_service_calls[[
+#     'parent_service',     # caller
+#     'service',            # callee
+#     'operation',
+#     'timestamp',
+#     'time',
+#     'interval_number'
+# ]]
+
+edgeflow = inter_service_calls[[
+    'caller_service',
+    'callee_service',
+    'operation',
+    'start_time']]
+
+edgeflow.to_csv("project2&3traces/project2edgeflow.csv", index=False, header=True)
+
+snapshots = inter_service_calls[[
+    'caller_service',
+    'callee_service',
+    'start_time']].copy()
 
 # Calculate the interval number from the minimum start_time
 interval_duration_ns = 1_000_000_000  # 1 second intervals
-min_time_ns = inter_service_calls['start_time'].min()
-inter_service_calls['interval_number'] = (
-    (inter_service_calls['start_time'] - min_time_ns) // interval_duration_ns
+min_time_ns = snapshots['start_time'].min()
+snapshots['interval'] = (
+    (snapshots['start_time'] - min_time_ns) // interval_duration_ns
 ).astype(int)
 
-# Select relevant columns
-result = inter_service_calls[[
-    'parent_service',     # caller
-    'service',            # callee
-    'operation',
-    'timestamp',
-    'time',
-    'interval_number'
-]].rename(columns={
-    'parent_service': 'caller_service',
-    'service': 'callee_service'
-})
+snapshots = snapshots[[
+    'caller_service',
+    'callee_service',
+    'interval']]
 
-# Optional: sort by time
-result = result.sort_values(by='time')
+snapshots = snapshots.value_counts().reset_index(name='count').sort_values('interval')
 
-result.to_csv("project2&3traces/edgeflow.csv", index=False, header=True)
+snapshots.to_csv("project2&3traces/project3snapshots.csv", index=False, header=True)
