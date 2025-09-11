@@ -1,4 +1,5 @@
-import numpy as np
+# Check project2&3traces.py on how the data is prepared
+
 # Load trace snapshots
 from tenetan.networks import SnapshotGraph
 network = SnapshotGraph()
@@ -12,7 +13,7 @@ print("Number of nodes:", network.N)
 # Number of timestamps <-> number of non-empty intervals
 print("Number of timestamps:", network.T)
 # Number of edges -> should match the size of the csv
-print("Number of edges:", np.count_nonzero(network.tensor))
+print("Number of edges:", network.E)
 
 # Perform state detection using Graph Edit Distance (default)
 # Last two returns are distance matrix (dm) and linkage matrix (lm, comes from scipy clustering)
