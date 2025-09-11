@@ -15,9 +15,9 @@ print("Number of timestamps:", network.T)
 print("Number of edges:", np.count_nonzero(network.tensor))
 
 # Perform state detection using Graph Edit Distance (default)
-# Last two returns are distance matrix and linkage matrix
+# Last two returns are distance matrix (dm) and linkage matrix (lm, comes from scipy clustering)
 from tenetan.state import MasudaHolme
-best_C, labels, dunn_scores, _, _ = MasudaHolme(network)
+best_C, labels, dunn_scores, dm, lm = MasudaHolme(network)
 
 # labels[t, c-1] is the cluster (state) of interval t when using 'c' states;
 # best_C is the index of the best clustering
@@ -62,7 +62,7 @@ from functools import partial
 n_eig = 2
 my_dist = partial(tenetan.static.distance.SpectralDistance, n_eig=n_eig)
 
-best_C, labels, dunn_scores, _, _ = MasudaHolme(network, dist=my_dist)
+best_C, labels, dunn_scores, dm, lm =  MasudaHolme(network, dist=my_dist)
 print(f"Spectral Distance ({n_eig=}) - best number of states:", best_C+1)
 print(f"Spectral Distance ({n_eig=}) - best Dunn Index:", dunn_scores[best_C])
 
@@ -88,4 +88,11 @@ plt.xticks(xs, l)
 
 plt.title(f"States ({n_states}) based on Spectral Distance ({n_eig=})")
 plt.tight_layout()
+plt.show()
+
+# Linkage matrix (lm) comes from SciPy, so we can plot it using its tools
+from scipy.cluster.hierarchy import dendrogram
+plt.figure()
+dendrogram(lm)
+plt.title("State detection dendrogram")
 plt.show()
