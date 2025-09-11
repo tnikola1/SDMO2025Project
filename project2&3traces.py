@@ -9,7 +9,7 @@ df = pd.read_csv("project2&3traces/train-ticket-traces.csv")
 df.rename(columns={
     'SpanID': 'span_id',
     'ParentID': 'parent_id',
-    'PodName': 'service',
+    'PodName': 'service',  # in this data, each service has a unique instance
     'OperationName': 'operation',
     'StartTimeUnixNano': 'start_time',
     'EndTimeUnixNano': 'end_time'
@@ -48,8 +48,13 @@ snapshots = inter_service_calls[[
     'callee_service',
     'start_time']].copy()
 
-# Calculate the interval number from the minimum start_time
+# Aggregate network into intervals with given duration
+# Note: this selection results in certain intervals being empty
+# You should select your dataset and tune this value for your data
+# so that you have consecutive intervals
 interval_duration_ns = 1_000_000_000  # 1 second intervals
+
+# Calculate the interval number from the minimum start_time
 min_time_ns = snapshots['start_time'].min()
 snapshots['interval'] = (
     (snapshots['start_time'] - min_time_ns) // interval_duration_ns
