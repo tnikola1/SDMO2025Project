@@ -22,3 +22,14 @@ The three projects are:
   - `project3anomaly.csv`: CSV file providing snapshot networks for service calls grouped by intervals for Project 3
 - `project2&3data.py`: Script processing raw traces into formats required by Projects 2&3
 - `project3anomaly.py`: Script demonstrating temporal state detection on temporal networks of microservice calls for Project 3
+- `requirements.txt`: List of used libraries with specified versions
+
+
+## Running the scripts
+
+The scripts were developed and tested on a Mac (UNIX) environment with Python 3.10.
+There should be no compatibility issues with running the scripts on Windows.
+
+The versions of imported libraries are provided in `requirements.txt`.
+
+It is recommended to create a Python virtual enviroment and install the exact versions there.
