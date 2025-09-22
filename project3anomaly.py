@@ -1,4 +1,4 @@
-# Check project2&3traces.py on how the data is prepared
+# Check project2&3data.py on how the data is prepared
 import os
 
 # Load trace snapshots
