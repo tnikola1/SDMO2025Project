@@ -1,8 +1,9 @@
 import pandas as pd
+import os
 
 
 # Data from https://github.com/IntelligentDDS/Nezha/blob/main/construct_data/2023-01-30/trace/11_39_trace.csv
-df = pd.read_csv("project2&3traces/train-ticket-traces.csv")
+df = pd.read_csv(os.path.join("project2&3traces","train-ticket-traces.csv"))
 
 
 # Rename columns for clarity
@@ -40,7 +41,7 @@ edgeflow = inter_service_calls[[
     'callee_service',
     'operation']] #kept for reference, not used in the analysis
 
-edgeflow.to_csv("project2&3traces/project2edgeflow.csv", index=False, header=True)
+edgeflow.to_csv(os.path.join("project2&3traces", "project2edgeflow.csv"), index=False, header=True)
 
 # Project 3: create network snapshots by grouping calls within intervals
 snapshots = inter_service_calls[[
@@ -69,4 +70,4 @@ snapshots = snapshots[[
 # Count identical pairs caller->callee within each interval
 snapshots = snapshots.value_counts().reset_index(name='count').sort_values('interval')
 
-snapshots.to_csv("project2&3traces/project3snapshots.csv", index=False, header=True)
+snapshots.to_csv(os.path.join("project2&3traces", "project3snapshots.csv"), index=False, header=True)

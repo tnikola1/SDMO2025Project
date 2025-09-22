@@ -1,9 +1,10 @@
 # Check project2&3traces.py on how the data is prepared
+import os
 
 # Load trace snapshots
 from tenetan.networks import SnapshotGraph
 network = SnapshotGraph()
-network.load_csv("project2&3traces/project3snapshots.csv", source="caller_service",
+network.load_csv(os.path.join("project2&3traces", "project3snapshots.csv"), source="caller_service",
                  target="callee_service", weight="count", timestamp="interval",
                  sort_timestamps=False, sort_vertices=True)
 
