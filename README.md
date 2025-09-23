@@ -20,7 +20,11 @@ The three projects are:
   - `train-ticket-traces.csv`: CSV file with traces for train-ticket system from an open dataset
   - `project2edgeflow.csv`: CSV file providing a list of real-time service calls for Project 2
   - `project3anomaly.csv`: CSV file providing snapshot networks for service calls grouped by intervals for Project 3
+  - `project2_katz_exponential.csv`: CSV file with Temporal Katz Centrality with exponential decay
+  - `project2_katz_constant.csv`: CSV file with Temporal Katz Centrality with constant decay
+  - `project2_katz_truncated.csv`: CSV file with Temporal Katz Centrality with truncated exponential decay
 - `project2&3data.py`: Script processing raw traces into formats required by Projects 2&3
+- `project2centrality.py`: Script demonstrating temporal katz centrality on temporal edge flow network of microservice calls for Project 2
 - `project3anomaly.py`: Script demonstrating temporal state detection on temporal networks of microservice calls for Project 3
 - `requirements.txt`: List of used libraries with specified versions
 
@@ -32,4 +36,4 @@ There should be no compatibility issues with running the scripts on Windows.
 
 The versions of imported libraries are provided in `requirements.txt`.
 
-It is recommended to create a Python virtual enviroment and install the exact versions there.
+It is recommended to create a Python virtual environment and install the exact versions there.
