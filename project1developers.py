@@ -20,7 +20,7 @@ for commit in Repository("https://github.com/public-apis/public-apis").traverse_
 
 DEVS = sorted(DEVS)
 
-with open(os.path.join(r"c:\Users\OMISTAJA\OneDrive\Tiedostot\SDMO", "devs.csv"), 'w', newline='') as csvfile:
+with open(os.path.join(r"c:\Users\OMISTAJA\OneDrive\Tiedostot\SDMO", "devs.csv"), 'w', encoding="utf-8", newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',', quotechar='"')
     writer.writerow(["name", "email"])
     writer.writerows(DEVS)
@@ -30,7 +30,7 @@ with open(os.path.join(r"c:\Users\OMISTAJA\OneDrive\Tiedostot\SDMO", "devs.csv")
 
 DEVS = []
 # Read csv file with name,dev columns
-with open(os.path.join("project1devs", "devs.csv"), 'r', newline='') as csvfile:
+with open(os.path.join("project1devs", "devs.csv"), 'r', encoding="utf-8", newline='') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     for row in reader:
         DEVS.append(row)
