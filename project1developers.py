@@ -14,7 +14,7 @@ import os
 
 from pydriller import Repository
 DEVS = set()
-for commit in Repository("https://github.com/public-apis/public-apis").traverse_commits():
+for commit in Repository("https://github.com/TheAlgorithms/Python").traverse_commits():
     DEVS.add((commit.author.name, commit.author.email))
     DEVS.add((commit.committer.name, commit.committer.email))
 
@@ -113,7 +113,7 @@ df.to_csv(os.path.join("project1devs", "devs_similarity.csv"), index=False, head
 
 
 # Set similarity threshold, check c1-c3 against the threshold
-t=0.7
+t=0.99
 print("Threshold:", t)
 df["c1_check"] = df["c1"] >= t
 df["c2_check"] = df["c2"] >= t
