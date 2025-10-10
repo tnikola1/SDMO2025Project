@@ -113,7 +113,7 @@ df.to_csv(os.path.join("project1devs", "devs_similarity.csv"), index=False, head
 
 
 # Set similarity threshold, check c1-c3 against the threshold
-t=0.99
+t=0.8
 print("Threshold:", t)
 df["c1_check"] = df["c1"] >= t
 df["c2_check"] = df["c2"] >= t
