@@ -114,13 +114,15 @@ df.to_csv(os.path.join("project1devs", "devs_similarity.csv"), index=False, head
 
 # Set similarity threshold, check c1-c3 against the threshold
 t=0.52
+
 print("Threshold:", t)
 df["c1_check"] = df["c1"] >= t
 df["c2_check"] = df["c2"] >= t
 df["c3_check"] = (df["c3.1"] >= t) & (df["c3.2"] >= t)
 # Keep only rows where at least one condition is True
-df = df[df[["c1_check", "c2_check", "c3_check", "c4", "c5", "c6", "c7"]].any(axis=1)]
-
+checks = ["c1_check", "c2_check", "c3_check", "c4", "c5", "c6", "c7"]
+df = df[df[checks].sum(axis=1) >= 2]
+ 
 # Omit "check" columns, save to csv
 df = df[["name_1", "email_1", "name_2", "email_2", "c1", "c2",
         "c3.1", "c3.2", "c4", "c5", "c6", "c7"]]
